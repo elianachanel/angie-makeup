@@ -90,6 +90,9 @@ export type LocaleContent = {
       message: string;
     };
     submit: string;
+    submitting: string;
+    toastSuccess: string;
+    toastError: string;
     dateHintFrom: string;
     pastDatesBlocked: string;
     todayTimesHint: string;
@@ -118,7 +121,7 @@ export type LocaleContent = {
     successTitle: string;
     successBody: string;
   };
-  footer: { crafted: string };
+  footer: { crafted: string; admin: string };
   floating: { whatsapp: string; instagram: string; email: string };
 };
 
@@ -300,9 +303,9 @@ const es: LocaleContent = {
   booking: {
     label: "Reserva",
     title: "Reserva tu sesión",
-    description: "Con Angie — Makeup Artist Pro. Solo fechas desde hoy en adelante.",
+    description: "Con Angie Makeup Artist Pro. Solo fechas desde hoy en adelante.",
     successTitle: "Solicitud recibida",
-    successBody: "Gracias, {name}. Angie — Makeup Artist Pro confirmará tu cita el",
+    successBody: "Gracias, {name}. Angie confirmará tu cita el",
     bookAnother: "Reservar otra fecha",
     fields: {
       name: "Nombre",
@@ -320,6 +323,9 @@ const es: LocaleContent = {
       message: "Cuéntanos sobre tu evento, lugar y visión...",
     },
     submit: "Enviar reserva",
+    submitting: "Enviando...",
+    toastSuccess: "Reserva guardada. Abriendo WhatsApp...",
+    toastError: "No se pudo enviar la reserva. Intenta de nuevo.",
     dateHintFrom: "Desde",
     pastDatesBlocked: "fechas pasadas bloqueadas",
     todayTimesHint: "Solo horarios futuros para hoy",
@@ -372,7 +378,7 @@ const es: LocaleContent = {
     successTitle: "Mensaje enviado",
     successBody: "Gracias por escribir. Angie te responderá muy pronto.",
   },
-  footer: { crafted: "Creado con elegancia." },
+  footer: { crafted: "Creado con elegancia.", admin: "Panel admin" },
   floating: { whatsapp: "WhatsApp", instagram: "Instagram", email: "Email" },
 };
 
@@ -554,9 +560,9 @@ const en: LocaleContent = {
   booking: {
     label: "Reservation",
     title: "Book your session",
-    description: "Book with Angie — Makeup Artist Pro. Dates from today onward only.",
+    description: "Book with Angie Makeup Artist Pro. Dates from today onward only.",
     successTitle: "Request received",
-    successBody: "Thank you, {name}. Angie — Makeup Artist Pro will confirm your appointment on",
+    successBody: "Thank you, {name}. Angie will confirm your appointment on",
     bookAnother: "Book another date",
     fields: {
       name: "Name",
@@ -574,6 +580,9 @@ const en: LocaleContent = {
       message: "Tell us about your event, venue, and vision...",
     },
     submit: "Submit reservation",
+    submitting: "Sending...",
+    toastSuccess: "Reservation saved. Opening WhatsApp...",
+    toastError: "Could not submit your reservation. Please try again.",
     dateHintFrom: "From",
     pastDatesBlocked: "past dates blocked",
     todayTimesHint: "Only upcoming times shown for today",
@@ -626,7 +635,7 @@ const en: LocaleContent = {
     successTitle: "Message sent",
     successBody: "Thanks for reaching out. Angie will reply shortly.",
   },
-  footer: { crafted: "Crafted with elegance." },
+  footer: { crafted: "Crafted with elegance.", admin: "Admin panel" },
   floating: { whatsapp: "WhatsApp", instagram: "Instagram", email: "Email" },
 };
 

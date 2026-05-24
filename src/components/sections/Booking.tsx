@@ -2,6 +2,10 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useLocale } from "@/context/LocaleProvider";
+import { useToast } from "@/context/ToastProvider";
+import { useServices } from "@/hooks/useServices";
+import { createReservation } from "@/lib/actions/booking";
 import {
   getAvailableTimeSlots,
   getTodayLocal,
@@ -9,7 +13,6 @@ import {
   isPastDateTime,
 } from "@/lib/booking";
 import { bookingTimeSlots } from "@/lib/data";
-import { useLocale } from "@/context/LocaleProvider";
 import { fadeUp, inView, springFast, stagger } from "@/lib/motion";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
@@ -33,12 +36,21 @@ function formatDisplayTime(value: string) {
 export function Booking() {
   const { t, locale } = useLocale();
   const b = t.booking;
+  const toast = useToast();
+  const { services: dbServices } = useServices();
+
+  const serviceOptions = useMemo(() => {
+    if (dbServices.length > 0) {
+      return dbServices.map((s) => ({ id: s.id, title: s.title }));
+    }
+    return t.services.items.map((s) => ({ id: s.id, title: s.title }));
+  }, [dbServices, t.services.items]);
 
   const initial: FormState = {
     name: "",
     email: "",
     phone: "",
-    service: t.services.items[0]?.id ?? "",
+    service: serviceOptions[0]?.id ?? "",
     date: "",
     time: "09:00",
     message: "",
@@ -48,6 +60,13 @@ export function Booking() {
   const [submitted, setSubmitted] = useState(false);
   const [dateError, setDateError] = useState("");
   const [slotTick, setSlotTick] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!form.service && serviceOptions[0]) {
+      setForm((f) => ({ ...f, service: serviceOptions[0].id }));
+    }
+  }, [serviceOptions, form.service]);
 
   const isToday = form.date === minDate;
 
@@ -99,7 +118,7 @@ export function Booking() {
     setForm({ ...form, date, time: nextTime });
   };
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (isPastDate(form.date)) {
       setDateError(b.errors.pastDatePick);
@@ -114,6 +133,27 @@ export function Booking() {
       return;
     }
     setDateError("");
+    setIsSubmitting(true);
+
+    const result = await createReservation({
+      client_name: form.name,
+      email: form.email,
+      phone: form.phone,
+      service: form.service,
+      booking_date: form.date,
+      booking_time: form.time,
+      message: form.message,
+    });
+
+    setIsSubmitting(false);
+
+    if (!result.success) {
+      toast.error(result.error ?? b.toastError);
+      return;
+    }
+
+    toast.success(b.toastSuccess);
+    window.open(result.whatsappUrl, "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
 
@@ -126,7 +166,7 @@ export function Booking() {
 
   return (
     <section id="booking" className="section-pad border-y border-white/[0.04]">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto w-full min-w-0 max-w-3xl">
         <SectionHeader label={b.label} title={b.title} description={b.description} />
 
         <motion.div
@@ -156,8 +196,19 @@ export function Booking() {
                   animate={{ scale: 1 }}
                   transition={springFast}
                   className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#e8b4bc]/30 bg-[#e8b4bc]/10 sm:h-20 sm:w-20"
+                  aria-hidden
                 >
-                  <span className="text-2xl text-[#e8b4bc] sm:text-3xl">✓</span>
+                  <svg
+                    className="h-8 w-8 text-[#e8b4bc] sm:h-10 sm:w-10"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 13l4 4L19 7" />
+                  </svg>
                 </motion.div>
                 <h3 className="mt-6 font-[family-name:var(--font-cormorant)] text-2xl text-[#f7efe8] sm:mt-8 sm:text-3xl">
                   {b.successTitle}
@@ -187,7 +238,7 @@ export function Booking() {
                 initial="hidden"
                 animate="show"
                 onSubmit={onSubmit}
-                className="relative space-y-4 sm:space-y-5"
+                className="relative min-w-0 space-y-4 sm:space-y-5"
               >
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
                   <motion.div variants={fadeUp}>
@@ -245,7 +296,7 @@ export function Booking() {
                       value={form.service}
                       onChange={(e) => setForm({ ...form, service: e.target.value })}
                     >
-                      {t.services.items.map((opt) => (
+                      {serviceOptions.map((opt) => (
                         <option key={opt.id} value={opt.id} className="bg-[#1a1014]">
                           {opt.title}
                         </option>
@@ -254,31 +305,35 @@ export function Booking() {
                   </motion.div>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
-                  <motion.div variants={fadeUp}>
+                <div className="grid min-w-0 gap-4 sm:grid-cols-2 sm:gap-5">
+                  <motion.div variants={fadeUp} className="min-w-0">
                     <label className="mb-2 block text-[10px] tracking-[0.2em] uppercase text-[#8a7a7e]">
                       {b.fields.date}
                     </label>
                     <input
                       required
                       type="date"
-                      className={`${fieldClass} ${dateError ? fieldErrorClass : ""}`}
+                      className={`${fieldClass} max-w-full min-w-0 px-3 sm:px-4 ${dateError ? fieldErrorClass : ""}`}
                       value={form.date}
                       min={minDate}
                       onChange={(e) => handleDateChange(e.target.value)}
                       onBlur={(e) => handleDateChange(e.target.value)}
                     />
                     {dateError ? (
-                      <p className="mt-2 text-xs text-[#e8b4bc]" role="alert">
+                      <p className="mt-2 break-words text-xs text-[#e8b4bc]" role="alert">
                         {dateError}
                       </p>
                     ) : (
-                      <p className="mt-2 text-[10px] text-[#6a5c60]">
-                        {b.dateHintFrom} {minDate} · {b.pastDatesBlocked}
+                      <p className="mt-2 break-words text-[10px] leading-relaxed text-[#6a5c60]">
+                        <span className="block sm:inline">
+                          {b.dateHintFrom} {minDate}
+                        </span>
+                        <span className="hidden sm:inline"> · </span>
+                        <span className="block sm:inline">{b.pastDatesBlocked}</span>
                       </p>
                     )}
                   </motion.div>
-                  <motion.div variants={fadeUp}>
+                  <motion.div variants={fadeUp} className="min-w-0">
                     <label className="mb-2 block text-[10px] tracking-[0.2em] uppercase text-[#8a7a7e]">
                       {b.fields.time}
                     </label>
@@ -329,8 +384,12 @@ export function Booking() {
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="pt-1 sm:pt-2">
-                  <Button type="submit" className="w-full min-h-[48px] sm:w-auto">
-                    {b.submit}
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full min-h-[48px] sm:w-auto"
+                  >
+                    {isSubmitting ? b.submitting : b.submit}
                   </Button>
                 </motion.div>
               </motion.form>

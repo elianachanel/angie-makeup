@@ -4,8 +4,8 @@ import { localeContent } from "@/i18n/translations";
 export const brand = {
   name: "Angie Makeup",
   email: "hello@angiemakeup.com",
-  phone: "+1 (555) 000-0000",
-  whatsapp: "https://wa.me/15550000000",
+  phone: "+1 (809) 492-4596",
+  whatsapp: "https://wa.me/18094924596",
   instagram: "https://www.instagram.com/angiiemakeupp/",
   instagramHandle: "@angiiemakeupp",
   /** Hero: productos de maquillaje sobre fondo rosa — flat lay aesthetic */

@@ -11,6 +11,7 @@ type Props = {
   children: ReactNode;
   className?: string;
   type?: "button" | "submit";
+  disabled?: boolean;
 };
 
 const styles = {
@@ -28,8 +29,9 @@ export function Button({
   children,
   className = "",
   type = "button",
+  disabled = false,
 }: Props) {
-  const classes = `inline-flex items-center justify-center rounded-full px-7 py-3.5 text-xs font-medium tracking-[0.18em] uppercase transition-colors ${styles[variant]} ${className}`;
+  const classes = `inline-flex items-center justify-center rounded-full px-7 py-3.5 text-xs font-medium tracking-[0.18em] uppercase transition-colors disabled:pointer-events-none disabled:opacity-50 ${styles[variant]} ${className}`;
 
   const motionProps = {
     whileHover: { scale: 1.02 },
@@ -48,7 +50,13 @@ export function Button({
   }
 
   return (
-    <motion.button type={type} onClick={onClick} className={classes} {...motionProps}>
+    <motion.button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={classes}
+      {...motionProps}
+    >
       {children}
     </motion.button>
   );

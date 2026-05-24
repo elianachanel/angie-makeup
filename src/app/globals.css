@@ -52,6 +52,29 @@ body {
   }
 }
 
+/* Campo fecha: evita desborde horizontal en móvil (Safari / Chrome) */
+input[type="date"] {
+  max-width: 100%;
+  min-width: 0;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  min-width: 0;
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  input[type="date"] {
+    display: block;
+    width: 100%;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    margin-left: auto;
+    padding: 0;
+  }
+}
+
 .section-pad {
   scroll-margin-top: 5.5rem;
   padding-inline: 1rem;

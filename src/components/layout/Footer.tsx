@@ -39,7 +39,14 @@ export function Footer() {
         </div>
       </div>
       <p className="mx-auto mt-10 max-w-6xl text-center text-[11px] text-[#6a5c60]">
-        © {new Date().getFullYear()} {brand.name}. {t.footer.crafted}
+        © {new Date().getFullYear()} {brand.name}. {t.footer.crafted}{" "}
+        <span className="text-[#4a4044]">·</span>{" "}
+        <Link
+          href="/admin/login"
+          className="text-[#5a5054] transition hover:text-[#e8b4bc]/80"
+        >
+          {t.footer.admin}
+        </Link>
       </p>
     </footer>
   );

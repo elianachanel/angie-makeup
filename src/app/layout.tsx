@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Raleway } from "next/font/google";
 import { MotionProvider } from "@/components/MotionProvider";
 import { LocaleProvider } from "@/context/LocaleProvider";
+import { ToastProvider } from "@/context/ToastProvider";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -44,10 +45,12 @@ export default function RootLayout({
     <html lang="es" className={`${cormorant.variable} ${raleway.variable} h-full`}>
       <body className="min-h-full overflow-x-hidden bg-[#080608] antialiased">
         <LocaleProvider>
-          <MotionProvider>
-            <div className="noise-overlay fixed inset-0 z-[1] opacity-60" aria-hidden />
-            {children}
-          </MotionProvider>
+          <ToastProvider>
+            <MotionProvider>
+              <div className="noise-overlay fixed inset-0 z-[1] opacity-60" aria-hidden />
+              {children}
+            </MotionProvider>
+          </ToastProvider>
         </LocaleProvider>
       </body>
     </html>
