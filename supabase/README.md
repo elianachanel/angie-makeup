@@ -15,6 +15,12 @@ Copia `.env.example` a `.env.local` y completa:
 
 En **Vercel** → Project → Settings → Environment Variables, añade las mismas.
 
+**Importante:** marca Production y Preview, guarda, y luego **Deployments → Redeploy**.
+Sin redeploy, el admin dará error 500 (`MIDDLEWARE_INVOCATION_FAILED`).
+
+Usa la clave **Publishable** (`sb_publishable_...`) como `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+Si el login falla, en Supabase → API Keys prueba también la clave **anon** legacy (`eyJ...`).
+
 ## 3. Crear administrador
 
 1. **Authentication** → **Users** → **Add user** (email + contraseña).

@@ -2,12 +2,15 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useActionState, Suspense } from "react";
 import { signInAdmin } from "@/lib/actions/auth";
 import { fadeUp } from "@/lib/motion";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const [state, formAction, pending] = useActionState(signInAdmin, null);
+  const searchParams = useSearchParams();
+  const configMissing = searchParams.get("config") === "missing";
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080608] px-4">
@@ -37,6 +40,12 @@ export default function AdminLoginPage() {
         </motion.div>
 
         <motion.form variants={fadeUp} action={formAction} className="mt-8 space-y-4">
+          {configMissing ? (
+            <p className="rounded-xl border border-[#c9a87c]/30 bg-[#c9a87c]/10 px-4 py-3 text-sm text-[#f7efe8]">
+              Falta configurar Supabase en Vercel: añade las 3 variables de entorno y
+              haz Redeploy.
+            </p>
+          ) : null}
           {state?.error ? (
             <p className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
               {state.error}
@@ -83,5 +92,13 @@ export default function AdminLoginPage() {
         </motion.p>
       </motion.div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }

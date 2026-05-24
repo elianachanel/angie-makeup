@@ -1,13 +1,28 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getSupabaseEnv } from "@/lib/supabase/env";
 
 export async function updateSession(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+  const isLogin = path === "/admin/login";
+  const isAdminRoute = path.startsWith("/admin");
+
+  const { url, key, isConfigured } = getSupabaseEnv();
+
+  if (!isConfigured) {
+    if (isAdminRoute && !isLogin) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/admin/login";
+      loginUrl.searchParams.set("config", "missing");
+      return NextResponse.redirect(loginUrl);
+    }
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
+  try {
+    const supabase = createServerClient(url!, key!, {
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -20,22 +35,25 @@ export async function updateSession(request: NextRequest) {
           );
         },
       },
-    },
-  );
+    });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  const path = request.nextUrl.pathname;
-  const isAdminRoute = path.startsWith("/admin");
-  const isLogin = path === "/admin/login";
-
-  if (isAdminRoute && !isLogin && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/admin/login";
-    url.searchParams.set("redirect", path);
-    return NextResponse.redirect(url);
+    if (isAdminRoute && !isLogin && !user) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/admin/login";
+      redirectUrl.searchParams.set("redirect", path);
+      return NextResponse.redirect(redirectUrl);
+    }
+  } catch (error) {
+    console.error("[middleware] Supabase session error:", error);
+    if (isAdminRoute && !isLogin) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/admin/login";
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return supabaseResponse;
