@@ -94,6 +94,8 @@ export type LocaleContent = {
     submitting: string;
     toastSuccess: string;
     toastError: string;
+    openWhatsApp: string;
+    whatsappHint: string;
     dateHintFrom: string;
     pastDatesBlocked: string;
     todayTimesHint: string;
@@ -326,8 +328,10 @@ const es: LocaleContent = {
     },
     submit: "Enviar reserva",
     submitting: "Enviando...",
-    toastSuccess: "Reserva guardada. Abriendo WhatsApp...",
+    toastSuccess: "Reserva guardada.",
     toastError: "No se pudo enviar la reserva. Intenta de nuevo.",
+    openWhatsApp: "Abrir WhatsApp",
+    whatsappHint: "Si no se abrió solo, pulsa el botón para enviar el mensaje a Angie.",
     dateHintFrom: "Desde",
     pastDatesBlocked: "fechas pasadas bloqueadas",
     todayTimesHint: "Solo horarios futuros para hoy",
@@ -584,8 +588,10 @@ const en: LocaleContent = {
     },
     submit: "Submit reservation",
     submitting: "Sending...",
-    toastSuccess: "Reservation saved. Opening WhatsApp...",
+    toastSuccess: "Reservation saved.",
     toastError: "Could not submit your reservation. Please try again.",
+    openWhatsApp: "Open WhatsApp",
+    whatsappHint: "If WhatsApp did not open, tap the button to send your message to Angie.",
     dateHintFrom: "From",
     pastDatesBlocked: "past dates blocked",
     todayTimesHint: "Only upcoming times shown for today",

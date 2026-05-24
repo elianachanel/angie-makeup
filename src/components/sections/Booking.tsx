@@ -13,6 +13,7 @@ import {
   isPastDateTime,
 } from "@/lib/booking";
 import { bookingTimeSlots } from "@/lib/data";
+import { openWhatsAppUrl } from "@/lib/open-whatsapp";
 import { fadeUp, inView, springFast, stagger } from "@/lib/motion";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
@@ -61,6 +62,7 @@ export function Booking() {
   const [dateError, setDateError] = useState("");
   const [slotTick, setSlotTick] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastWhatsappUrl, setLastWhatsappUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!form.service && serviceOptions[0]) {
@@ -152,9 +154,10 @@ export function Booking() {
       return;
     }
 
-    toast.success(b.toastSuccess);
-    window.open(result.whatsappUrl, "_blank", "noopener,noreferrer");
+    setLastWhatsappUrl(result.whatsappUrl);
     setSubmitted(true);
+    toast.success(b.toastSuccess);
+    openWhatsAppUrl(result.whatsappUrl);
   };
 
   const fieldClass =
@@ -219,11 +222,24 @@ export function Booking() {
                   {locale === "es" ? "a las" : "at"}{" "}
                   <span className="text-[#e8d8dc]">{formatDisplayTime(form.time)}</span>.
                 </p>
+                {lastWhatsappUrl ? (
+                  <>
+                    <p className="mt-4 px-2 text-xs text-[#8a7a7e]">{b.whatsappHint}</p>
+                    <Button
+                      href={lastWhatsappUrl}
+                      variant="primary"
+                      className="mt-4 w-full min-h-[48px] sm:mt-6"
+                    >
+                      {b.openWhatsApp}
+                    </Button>
+                  </>
+                ) : null}
                 <Button
                   variant="outline"
-                  className="mt-6 w-full sm:mt-8 sm:w-auto"
+                  className="mt-4 w-full sm:mt-6 sm:w-auto"
                   onClick={() => {
                     setSubmitted(false);
+                    setLastWhatsappUrl(null);
                     setForm(initial);
                     setDateError("");
                   }}
