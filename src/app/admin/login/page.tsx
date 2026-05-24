@@ -13,7 +13,7 @@ function AdminLoginForm() {
   const configMissing = searchParams.get("config") === "missing";
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080608] px-4">
+    <div className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-[#080608] px-4 py-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-32 top-20 h-96 w-96 rounded-full bg-[#e8b4bc]/15 blur-[100px]"

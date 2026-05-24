@@ -18,6 +18,7 @@ export type LocaleContent = {
     reviews: string;
     contact: string;
     bookNow: string;
+    admin: string;
     openMenu: string;
     closeMenu: string;
   };
@@ -139,6 +140,7 @@ const es: LocaleContent = {
     reviews: "Reseñas",
     contact: "Contacto",
     bookNow: "Reservar",
+    admin: "Admin",
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
   },
@@ -396,6 +398,7 @@ const en: LocaleContent = {
     reviews: "Reviews",
     contact: "Contact",
     bookNow: "Book Now",
+    admin: "Admin",
     openMenu: "Open menu",
     closeMenu: "Close menu",
   },

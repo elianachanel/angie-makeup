@@ -61,6 +61,12 @@ export function Navbar() {
             </Link>
           ))}
           <LanguageSwitcher />
+          <Link
+            href="/admin/login"
+            className="rounded-full border border-white/[0.12] px-4 py-2 text-[10px] font-medium tracking-[0.15em] uppercase text-[#a89a9e] transition hover:border-[#e8b4bc]/35 hover:text-[#f7efe8]"
+          >
+            {t.nav.admin}
+          </Link>
           <Button href={navHrefs.book} variant="primary" className="!px-5 !py-2.5 !text-[10px]">
             {t.nav.bookNow}
           </Button>
@@ -112,6 +118,13 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+              <Link
+                href="/admin/login"
+                onClick={() => setOpen(false)}
+                className="mt-1 flex min-h-[44px] items-center justify-center rounded-2xl border border-white/[0.1] px-4 py-3 text-[11px] font-medium tracking-[0.18em] uppercase text-[#c4b4b8] transition hover:border-[#e8b4bc]/30 hover:bg-white/[0.04] hover:text-[#f7efe8]"
+              >
+                {t.nav.admin}
+              </Link>
               <Button href={navHrefs.book} className="mt-2 w-full">
                 {t.nav.bookNow}
               </Button>

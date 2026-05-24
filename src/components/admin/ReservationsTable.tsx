@@ -130,20 +130,20 @@ export function ReservationsTable({ reservations, serviceTitles, loading }: Prop
                   ) : null}
                 </div>
 
-                <div className="flex flex-wrap gap-2 lg:shrink-0 lg:flex-col">
+                <div className="grid grid-cols-2 gap-2 border-t border-white/[0.06] pt-4 sm:flex sm:flex-wrap lg:max-w-xs lg:shrink-0 lg:flex-col lg:border-0 lg:pt-0">
                   {r.status === "pending" ? (
                     <>
                       <button
                         type="button"
                         onClick={() => handleStatus(r.id, "confirmed")}
-                        className="rounded-full bg-[#e8b4bc]/20 px-4 py-2 text-[10px] tracking-wide uppercase text-[#f7efe8] ring-1 ring-[#e8b4bc]/30"
+                        className="min-h-[44px] rounded-xl bg-[#e8b4bc]/20 px-3 py-2.5 text-[10px] tracking-wide uppercase text-[#f7efe8] ring-1 ring-[#e8b4bc]/30 sm:rounded-full"
                       >
                         Confirmar
                       </button>
                       <button
                         type="button"
                         onClick={() => handleStatus(r.id, "cancelled")}
-                        className="rounded-full px-4 py-2 text-[10px] tracking-wide uppercase text-[#a89a9e] hover:bg-red-500/10 hover:text-red-200"
+                        className="min-h-[44px] rounded-xl px-3 py-2.5 text-[10px] tracking-wide uppercase text-[#a89a9e] ring-1 ring-white/[0.08] hover:bg-red-500/10 hover:text-red-200 sm:rounded-full"
                       >
                         Rechazar
                       </button>
@@ -153,7 +153,7 @@ export function ReservationsTable({ reservations, serviceTitles, loading }: Prop
                     <button
                       type="button"
                       onClick={() => handleStatus(r.id, "completed")}
-                      className="rounded-full bg-emerald-500/15 px-4 py-2 text-[10px] tracking-wide uppercase text-emerald-200"
+                      className="col-span-2 min-h-[44px] rounded-xl bg-emerald-500/15 px-3 py-2.5 text-[10px] tracking-wide uppercase text-emerald-200 sm:col-span-1 sm:rounded-full"
                     >
                       Completar
                     </button>
@@ -163,7 +163,7 @@ export function ReservationsTable({ reservations, serviceTitles, loading }: Prop
                     onChange={(e) =>
                       handleStatus(r.id, e.target.value as ReservationStatus)
                     }
-                    className="rounded-xl border border-white/[0.08] bg-[#1a1014] px-3 py-2 text-xs text-[#f7efe8]"
+                    className="col-span-2 min-h-[44px] rounded-xl border border-white/[0.08] bg-[#1a1014] px-3 py-2 text-xs text-[#f7efe8] sm:col-span-1"
                   >
                     {(Object.keys(statusLabels) as ReservationStatus[]).map((s) => (
                       <option key={s} value={s}>
@@ -174,7 +174,7 @@ export function ReservationsTable({ reservations, serviceTitles, loading }: Prop
                   <button
                     type="button"
                     onClick={() => handleDelete(r.id, r.client_name)}
-                    className="rounded-full px-4 py-2 text-[10px] tracking-wide uppercase text-red-300/80 hover:bg-red-500/10"
+                    className="col-span-2 min-h-[44px] rounded-xl px-3 py-2.5 text-[10px] tracking-wide uppercase text-red-300/80 ring-1 ring-red-500/20 hover:bg-red-500/10 sm:col-span-1 sm:rounded-full"
                   >
                     Eliminar
                   </button>

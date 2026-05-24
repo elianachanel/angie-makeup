@@ -23,7 +23,7 @@ export function StatCard({ label, value, hint, accent = "rose" }: Props) {
       className={`glass-panel relative overflow-hidden rounded-2xl border bg-gradient-to-br p-5 sm:p-6 ${accents[accent]}`}
     >
       <p className="text-[10px] tracking-[0.2em] uppercase text-[#8a7a7e]">{label}</p>
-      <p className="mt-2 font-[family-name:var(--font-cormorant)] text-4xl font-light text-[#f7efe8]">
+      <p className="mt-2 font-[family-name:var(--font-cormorant)] text-3xl font-light text-[#f7efe8] sm:text-4xl">
         {value}
       </p>
       {hint ? <p className="mt-1 text-xs text-[#6a5c60]">{hint}</p> : null}

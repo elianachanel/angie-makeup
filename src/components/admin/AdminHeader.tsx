@@ -11,7 +11,7 @@ export function AdminHeader({ title, subtitle, onMenuClick }: Props) {
     <header className="mb-8 flex items-start justify-between gap-4">
       <div>
         <p className="section-label mb-1">Panel</p>
-        <h1 className="font-[family-name:var(--font-cormorant)] text-3xl font-light text-[#f7efe8] sm:text-4xl">
+        <h1 className="font-[family-name:var(--font-cormorant)] text-2xl font-light text-[#f7efe8] sm:text-4xl">
           {title}
         </h1>
         {subtitle ? (

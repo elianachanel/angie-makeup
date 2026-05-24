@@ -14,9 +14,9 @@ export function AdminShell({ children, title, subtitle }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#080608]">
+    <div className="flex min-h-[100dvh] overflow-x-hidden bg-[#080608]">
       <AdminSidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
-      <main className="min-w-0 flex-1 px-4 py-6 sm:px-8 sm:py-10">
+      <main className="min-w-0 flex-1 overflow-x-hidden px-4 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-8 sm:py-10">
         <AdminHeader
           title={title}
           subtitle={subtitle}

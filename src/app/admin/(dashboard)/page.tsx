@@ -25,7 +25,7 @@ export default function AdminDashboardPage() {
         variants={stagger}
         initial="hidden"
         animate="show"
-        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4"
       >
         <StatCard label="Total reservas" value={stats.total} accent="champagne" />
         <StatCard
