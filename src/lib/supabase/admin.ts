@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { fetchAdminAccess } from "@/lib/supabase/admin-access";
 
 export async function getSessionUser() {
   const supabase = await createClient();
@@ -13,13 +14,8 @@ export async function isAdminUser() {
   if (!user?.email) return false;
 
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("admins")
-    .select("id")
-    .eq("email", user.email)
-    .maybeSingle();
-
-  return !!data;
+  const { admin } = await fetchAdminAccess(supabase);
+  return !!admin;
 }
 
 export async function requireAdmin() {

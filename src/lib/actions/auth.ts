@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { fetchAdminAccess } from "@/lib/supabase/admin-access";
 import { createClient } from "@/lib/supabase/server";
 
 export async function signInAdmin(
@@ -24,15 +25,14 @@ export async function signInAdmin(
     return { error: "Credenciales inválidas." };
   }
 
-  const { data: admin } = await supabase
-    .from("admins")
-    .select("id")
-    .eq("email", email)
-    .maybeSingle();
+  const { admin, error: adminError } = await fetchAdminAccess(supabase);
 
-  if (!admin) {
+  if (adminError || !admin) {
     await supabase.auth.signOut();
-    return { error: "No tienes permisos de administrador." };
+    return {
+      error:
+        "No tienes permisos de administrador. En Supabase → SQL Editor ejecuta el script de la tabla admins (supabase/README.md) con el mismo email de Authentication.",
+    };
   }
 
   redirect("/admin");

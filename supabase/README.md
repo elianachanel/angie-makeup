@@ -24,15 +24,34 @@ Si el login falla, en Supabase → API Keys prueba también la clave **anon** le
 ## 3. Crear administrador
 
 1. **Authentication** → **Users** → **Add user** (email + contraseña).
-2. En **SQL Editor**, vincula el usuario a la tabla `admins`:
+2. En **SQL Editor**, vincula el usuario a la tabla `admins` (mismo email exacto que en Users):
 
 ```sql
 INSERT INTO public.admins (email, role, user_id)
 VALUES (
   'tu-email@ejemplo.com',
   'admin',
-  (SELECT id FROM auth.users WHERE email = 'tu-email@ejemplo.com')
+  (SELECT id FROM auth.users WHERE lower(email) = lower('tu-email@ejemplo.com'))
 );
+```
+
+### Si dice "No tienes permisos de administrador"
+
+El usuario existe en **Authentication** pero falta (o el email no coincide) en **admins**.
+
+En **Table Editor** → `admins` comprueba que haya una fila.
+
+Si no hay fila, ejecuta el `INSERT` de arriba.
+
+Si ya hay fila pero falla, ejecuta (cambia el email):
+
+```sql
+INSERT INTO public.admins (email, role, user_id)
+SELECT lower(u.email), 'admin', u.id
+FROM auth.users u
+WHERE lower(u.email) = lower('tu-email@ejemplo.com')
+ON CONFLICT (email) DO UPDATE
+SET user_id = EXCLUDED.user_id, role = 'admin';
 ```
 
 ## 4. Realtime (reservas en vivo)

@@ -8,7 +8,7 @@ export default async function AdminDashboardLayout({
 }) {
   const admin = await isAdminUser();
   if (!admin) {
-    redirect("/admin/login");
+    redirect("/admin/login?error=not_admin");
   }
 
   return children;

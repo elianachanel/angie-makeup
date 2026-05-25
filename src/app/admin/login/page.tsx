@@ -11,6 +11,7 @@ function AdminLoginForm() {
   const [state, formAction, pending] = useActionState(signInAdmin, null);
   const searchParams = useSearchParams();
   const configMissing = searchParams.get("config") === "missing";
+  const notAdmin = searchParams.get("error") === "not_admin";
 
   return (
     <div className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-[#080608] px-4 py-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
@@ -44,6 +45,13 @@ function AdminLoginForm() {
             <p className="rounded-xl border border-[#c9a87c]/30 bg-[#c9a87c]/10 px-4 py-3 text-sm text-[#f7efe8]">
               Falta configurar Supabase en Vercel: añade las 3 variables de entorno y
               haz Redeploy.
+            </p>
+          ) : null}
+          {notAdmin ? (
+            <p className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              Sesión válida pero sin permisos. En Supabase ejecuta el SQL de la tabla{" "}
+              <code className="text-[#f7efe8]">admins</code> con el mismo email que usas
+              para entrar (ver supabase/README.md).
             </p>
           ) : null}
           {state?.error ? (
