@@ -60,6 +60,17 @@ SET user_id = EXCLUDED.user_id, role = 'admin';
 
 Ejecuta también `migrations/004_admins_rls_by_user_id.sql` para que el login reconozca la fila por `user_id` de Auth.
 
+## Evitar pausa del plan Free (7 días sin uso)
+
+El proyecto incluye un **cron diario en Vercel** (`/api/cron/keep-alive`) que hace una consulta ligera a Supabase.
+
+Tras cada deploy en Vercel:
+
+1. El archivo `vercel.json` activa el cron automáticamente.
+2. Opcional: en **Environment Variables** añade `CRON_SECRET` (Vercel puede generarlo). Sin esto, la ruta sigue funcionando; con secret, solo Vercel Cron puede llamarla.
+
+Comprueba en Vercel → **Settings → Cron Jobs** que aparezca `keep-alive` programado cada día.
+
 ## 4. Realtime (reservas en vivo)
 
 En **Database** → **Replication**, activa la tabla `reservations` para `supabase_realtime`.

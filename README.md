@@ -30,6 +30,7 @@ Ver configuración de Supabase en [`supabase/README.md`](supabase/README.md).
 2. Import in [Vercel](https://vercel.com)
 3. Add environment variables from `.env.example`
 4. Run the SQL migration in your Supabase project
+5. Cron **keep-alive** (daily) evita que Supabase Free pause el proyecto por inactividad — ver `vercel.json`
 
 ## Admin dashboard
 
