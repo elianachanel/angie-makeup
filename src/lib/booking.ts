@@ -1,12 +1,27 @@
 import { bookingTimeSlots } from "@/lib/data";
 
+/** Fecha en zona local del navegador (YYYY-MM-DD) */
+export function toLocalIsoDate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 /** Fecha de hoy en zona local (YYYY-MM-DD) */
 export function getTodayLocal(): string {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return toLocalIsoDate(new Date());
+}
+
+export function addDaysToLocalIso(isoDate: string, days: number): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const dt = new Date(y, m - 1, d);
+  dt.setDate(dt.getDate() + days);
+  return toLocalIsoDate(dt);
+}
+
+export function getTomorrowLocal(): string {
+  return addDaysToLocalIso(getTodayLocal(), 1);
 }
 
 function slotToDate(date: string, time: string): Date {

@@ -13,7 +13,8 @@ export function useReservations() {
     const { data, error } = await supabase
       .from("reservations")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("booking_date", { ascending: true })
+      .order("booking_time", { ascending: true });
 
     if (!error && data) {
       setReservations(data as Reservation[]);

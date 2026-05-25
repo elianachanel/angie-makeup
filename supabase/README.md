@@ -39,7 +39,9 @@ VALUES (
 
 El usuario existe en **Authentication** pero falta en **admins**, el email no coincide, o falta ejecutar `004_admins_rls_by_user_id.sql`.
 
-Debes entrar con el **mismo email** que en la tabla (ej. `angiemakeup@gmail.com`).
+Debes entrar con el **mismo email** que en la tabla (ej. `adamesff23@gmail.com`).
+
+Si cambiaste de correo, ejecuta `migrations/006_update_admin_email.sql` en SQL Editor.
 
 En **Table Editor** → `admins` comprueba que haya una fila.
 
@@ -70,6 +72,14 @@ Tras cada deploy en Vercel:
 2. Opcional: en **Environment Variables** añade `CRON_SECRET` (Vercel puede generarlo). Sin esto, la ruta sigue funcionando; con secret, solo Vercel Cron puede llamarla.
 
 Comprueba en Vercel → **Settings → Cron Jobs** que aparezca `keep-alive` programado cada día.
+
+## Borrado automático de reservas (8 meses)
+
+1. Ejecuta `migrations/005_purge_old_reservations.sql` en SQL Editor.
+2. En Vercel añade **`SUPABASE_SERVICE_ROLE_KEY`** (clave **service_role** de Supabase, solo servidor).
+3. Cron **`purge-reservations`**: el día **1 de cada mes** borra citas con `booking_date` de hace más de **8 meses**.
+
+No subas la service_role a GitHub ni la pongas en `NEXT_PUBLIC_*`.
 
 ## 4. Realtime (reservas en vivo)
 
