@@ -16,16 +16,19 @@ export async function signInAdmin(
   }
 
   const supabase = await createClient();
-  const { error: authError } = await supabase.auth.signInWithPassword({
+  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (authError) {
+  if (authError || !authData.user) {
     return { error: "Credenciales inválidas." };
   }
 
-  const { admin, error: adminError } = await fetchAdminAccess(supabase);
+  const { admin, error: adminError } = await fetchAdminAccess(supabase, {
+    userId: authData.user.id,
+    email: authData.user.email ?? email,
+  });
 
   if (adminError || !admin) {
     await supabase.auth.signOut();

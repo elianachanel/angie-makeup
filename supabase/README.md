@@ -37,7 +37,9 @@ VALUES (
 
 ### Si dice "No tienes permisos de administrador"
 
-El usuario existe en **Authentication** pero falta (o el email no coincide) en **admins**.
+El usuario existe en **Authentication** pero falta en **admins**, el email no coincide, o falta ejecutar `004_admins_rls_by_user_id.sql`.
+
+Debes entrar con el **mismo email** que en la tabla (ej. `angiemakeup@gmail.com`).
 
 En **Table Editor** → `admins` comprueba que haya una fila.
 
@@ -53,6 +55,10 @@ WHERE lower(u.email) = lower('tu-email@ejemplo.com')
 ON CONFLICT (email) DO UPDATE
 SET user_id = EXCLUDED.user_id, role = 'admin';
 ```
+
+### Política RLS por user_id (recomendado)
+
+Ejecuta también `migrations/004_admins_rls_by_user_id.sql` para que el login reconozca la fila por `user_id` de Auth.
 
 ## 4. Realtime (reservas en vivo)
 

@@ -14,7 +14,10 @@ export async function isAdminUser() {
   if (!user?.email) return false;
 
   const supabase = await createClient();
-  const { admin } = await fetchAdminAccess(supabase);
+  const { admin } = await fetchAdminAccess(supabase, {
+    userId: user.id,
+    email: user.email,
+  });
   return !!admin;
 }
 
